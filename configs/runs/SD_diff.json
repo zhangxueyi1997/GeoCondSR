@@ -1,0 +1,12 @@
+{
+ "script": "src/train59.py",
+ "args": {
+  "model": "diff",
+  "fold": "SD",
+  "seed": 105,
+  "steps": 40000,
+  "bs": 4,
+  "workers": 4,
+  "resume": "auto"
+ }
+}

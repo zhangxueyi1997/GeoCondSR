@@ -1,0 +1,33 @@
+{
+ "script": "src/train54.py",
+ "args": {
+  "stage": 2,
+  "fold": "SD",
+  "seed": 105,
+  "steps": 8000,
+  "bs": 4,
+  "workers": 4,
+  "lr": 0.0001,
+  "aug": 1,
+  "resume": "auto",
+  "mver": 1,
+  "mean_ckpt": "${RUNS}/SD_m54b/ckpt/final.pt",
+  "init_g": "${RUNS}/SD_rot2/ckpt/step0010000.pt",
+  "geo": 0,
+  "lr_fa": 0.001,
+  "w_en": 1.0,
+  "w_spec": 1.0,
+  "w_top": 2.0,
+  "w_loc": 6.0,
+  "w_por": 10.0,
+  "w_deg": 1.0,
+  "proj_train": 8,
+  "w_adv": 0.1,
+  "lr_d": 0.0001,
+  "d_every": 2,
+  "d_noise": 0.05,
+  "d_noise_floor": 0.02,
+  "r1": 0.1,
+  "r1_every": 4
+ }
+}

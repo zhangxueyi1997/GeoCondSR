@@ -1,0 +1,12 @@
+{
+ "script": "src/train_edsr.py",
+ "args": {
+  "fold": "SC",
+  "seed": 102,
+  "steps": 30000,
+  "bs": 4,
+  "lr": 0.0002,
+  "workers": 4,
+  "resume": "auto"
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "script": "src/train_srgan.py",
+ "args": {
+  "fold": "SC",
+  "seed": 102,
+  "steps": 30000,
+  "bs": 4,
+  "lr": 0.0002,
+  "lr_d": 0.0001,
+  "warm": 5000,
+  "lam": 0.005,
+  "workers": 4,
+  "resume": "auto"
+ }
+}

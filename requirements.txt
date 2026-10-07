@@ -1,0 +1,7 @@
+# PyTorch is installed separately for your CUDA version (see README)
+numpy>=1.26
+scipy>=1.13
+scikit-image>=0.25
+matplotlib>=3.10
+pillow>=11.0
+tifffile>=2024.1

@@ -1,0 +1,7 @@
+{
+ "script": "src/train_cpred.py",
+ "args": {
+  "fold": "SC",
+  "seed": 102
+ }
+}

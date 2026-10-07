@@ -1,0 +1,12 @@
+{
+ "script": "src/train59.py",
+ "args": {
+  "model": "swin",
+  "fold": "SHX",
+  "seed": 106,
+  "steps": 30000,
+  "bs": 4,
+  "workers": 4,
+  "resume": "auto"
+ }
+}
