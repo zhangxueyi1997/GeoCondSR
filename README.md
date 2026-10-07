@@ -44,7 +44,7 @@ pip install -r requirements.txt
 
 ## Data and pretrained models
 
-The paired dataset, the whole-plug context windows and the trained models are archived on Zenodo (DOI to be added). Download them and either place them in `data/` and `runs/` inside the repository or point the environment variables to their location:
+The paired dataset, the whole-plug context windows and the trained models are archived on Zenodo: https://doi.org/10.5281/zenodo.23219071 (CC BY 4.0). Download them and either place them in `data/` and `runs/` inside the repository or point the environment variables to their location:
 
 ```bash
 export GEOCOND_DATA=/path/to/data      # paired blocks and derived inputs
