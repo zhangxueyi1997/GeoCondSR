@@ -111,7 +111,7 @@ def gen(M, G, lr, c):
 
 
 FOLD = sys.argv[1]; OUT = str(OUT_ROOT) + '/eval57/'
-meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+meta = fold_meta(FOLD)
 CP = load_cpred('%s/%s_cpred/final.pt' % (RUNS, FOLD), dev)
 # ---------- 粗扫推「整体水平」（只用粗扫；细扫只作训练岩性的标签） ----------
 # 1 mm 窗（72³）的 3 个灰度统计 [分位2, 分位10, 标准差] → 0.75 mm 邻域的细扫 c（4 维），岭回归只用训练岩性拟合；

@@ -29,7 +29,7 @@ C = {}
 for g in ALL:
     cf = np.load('%s/cfield2/%s.npz' % (ROOT, g)); cb = cf['c_blk'].astype(np.float64)
     ok = cf['valid'] & np.isfinite(cb).all(-1); C[g] = cb[ok].mean(0)
-meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+meta = fold_meta(FOLD)
 ds = PairDataset(ROOT, meta['test'], c_src='blk')
 j0 = [k for k, (g, f) in enumerate(ds.items) if g == 'G01' and str(f).endswith('00174.npz')][0]
 M = load_mean('%s/%s_m54b/ckpt/final.pt' % (RUNS, FOLD), dev).eval()

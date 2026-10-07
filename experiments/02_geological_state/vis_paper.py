@@ -41,7 +41,7 @@ def energy(v):   # 细节带（<31 μm）的 7³ 局部能量
 OUT = {}; Z = 56
 with torch.no_grad():
     for FOLD in ['CQ', 'SC', 'YN', 'GZ', 'SD', 'SHX']:
-        meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+        meta = fold_meta(FOLD)
         ds = PairDataset(ROOT, meta['test'], c_src='blk')
         j = int(np.random.default_rng(0).choice(len(ds), min(200, len(ds)), replace=False)[0])
         b = ds[j]; g, f = ds.items[j]; cell = np.load(f)['cell'][:3].astype(int)

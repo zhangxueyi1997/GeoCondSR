@@ -44,7 +44,7 @@ if __name__ == '__main__':
     from dataset import PairDataset
     torch.set_num_threads(8)
     for F in FOLDS:
-        meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, F))); m = load_cpred('%s/%s_cpred/final.pt' % (RUNS, F), 'cpu')
+        meta = fold_meta(F); m = load_cpred('%s/%s_cpred/final.pt' % (RUNS, F), 'cpu')
         ds = PairDataset(str(R), meta['test'], c_src='blk')
         for g in meta['test']:
             js = [j for j, (gg, _) in enumerate(ds.items) if gg == g]

@@ -27,7 +27,7 @@ def proj(hr, lr, n=8):
     return hr
 
 
-meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+meta = fold_meta(FOLD)
 dtr = PairDataset(ROOT, meta['train'], unit_split='train', c_src='blk')
 kk = np.random.default_rng(1).choice(len(dtr), min(300, len(dtr)), replace=False)
 cconst = torch.from_numpy(np.stack([dtr[int(i)]['c'] for i in kk]).mean(0).astype(np.float32))[None].to(dev)   # 与终评同一常数

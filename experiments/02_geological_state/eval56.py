@@ -116,7 +116,7 @@ def gen(M, G, lr, c):
 
 FOLD = sys.argv[1]; OUT = str(OUT_ROOT) + '/eval56/'
 if NB == 200 and os.path.exists(OUT + 'eval56_%s.json' % FOLD): print('已有结果，跳过', FOLD, flush=True); sys.exit(0)   # 提前跑过则后续排队的重复启动直接跳过
-meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+meta = fold_meta(FOLD)
 CP = load_cpred('%s/%s_cpred/final.pt' % (RUNS, FOLD), dev)
 dtr = PairDataset(ROOT, meta['train'], unit_split='train', c_src='blk')
 kk = np.random.default_rng(1).choice(len(dtr), min(300, len(dtr)), replace=False)

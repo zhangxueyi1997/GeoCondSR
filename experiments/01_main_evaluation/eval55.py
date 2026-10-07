@@ -124,7 +124,7 @@ def pos(v, t):
 
 
 FOLD = sys.argv[1]
-meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+meta = fold_meta(FOLD)
 C_MODE = os.environ.get('C_MODE', 'blk'); CSRC = {'ann': 'ann', 'nbr': 'nbr_' + FOLD}.get(C_MODE, 'blk')   # nbr = 周围回归预测（按本折拟合）
 CP = load_cpred('%s/%s%s/final.pt' % (RUNS, FOLD, os.environ.get('CPRED_SUF', '_cpred')), dev) if C_MODE == 'pred' else None
 

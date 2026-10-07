@@ -120,7 +120,7 @@ def gen(M, G, lr, c):
 
 FOLD = sys.argv[1]; SKIP = os.environ.get('SKIP59', '0') == '1'; PFX = 'eval59a' if SKIP else 'eval59'
 if NB == 200 and os.path.exists(OUT + PFX + '_%s.json' % FOLD): print('已有结果，跳过', FOLD, flush=True); sys.exit(0)
-meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+meta = fold_meta(FOLD)
 CP = load_cpred('%s/%s_cpred/final.pt' % (RUNS, FOLD), dev)
 dtr = PairDataset(ROOT, meta['train'], unit_split='train', c_src='blk')
 kk = np.random.default_rng(1).choice(len(dtr), min(300, len(dtr)), replace=False)

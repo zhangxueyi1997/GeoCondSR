@@ -53,7 +53,7 @@ RES = {}
 t0 = time.time()
 with torch.no_grad():
     for FOLD in ['CQ', 'SC', 'YN', 'GZ', 'SD', 'SHX']:
-        meta = json.load(open('%s/%s_proj/meta.json' % (RUNS, FOLD)))
+        meta = fold_meta(FOLD)
         ds = PairDataset(ROOT, meta['test'], c_src='blk')
         J = np.random.default_rng(0).choice(len(ds), min(200, len(ds)), replace=False)[:NB]
         M = load_mean('%s/%s_m54b/ckpt/final.pt' % (RUNS, FOLD), dev).eval()
