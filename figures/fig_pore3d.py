@@ -21,7 +21,7 @@ from matplotlib.ticker import FixedLocator, NullLocator, MaxNLocator
 Z = np.load(FIGDATA / 'vis3d59_mask.npz')
 ROWS = [('CQ', 'Chongqing'), ('YN', 'Yunnan'), ('SHX', 'Shaanxi')]
 COLS = [('真值', 'Fine scan (2 μm)', T.C['细扫']), ('EDSR-3D', 'EDSR-3D', T.C['EDSR-3D']), ('SRGAN-3D', 'SRGAN-3D', T.C['SRGAN-3D']),
-        ('本文·无地质', 'Ours (coarse only)', T.C['本文']), ('本文·粗扫+稀疏细扫', 'Ours + sparse fine', T.C['本文+稀疏细扫'])]
+        ('本文·无地质', 'GeoCondSR', T.C['本文']), ('本文·粗扫+稀疏细扫', 'GeoCondSR + sparse fine', T.C['本文+稀疏细扫'])]
 N = 112; VOX = 2.0; MINV = 8
 PORE = np.array([0x3B, 0x6E, 0xA8]) / 255
 
@@ -93,7 +93,7 @@ for r, (f, pname) in enumerate(ROWS):
             ax.plot([pa[0], pb[0]], [pa[1], pb[1]], color='#A0A0A0', lw=0.35, ls=(0, (2, 1.5)) if hid else '-', zorder=0 if hid else 3)
         ax.set_xlim(8, S - 8); ax.set_ylim(S - 8, 8); ax.axis('off')
         ax.text(0.03, 0.02, r'$\phi$ = %.1f%%' % (100 * v.mean()), transform=ax.transAxes, fontsize=6, va='bottom')
-        if r == 0: ax.set_title(title, fontsize=7, pad=3, color=col if c else '#1A1A1A')
+        if r == 0: ax.set_title(title, fontsize=7, pad=3)
         if c == 0:
             ax.text(-0.04, 0.5, '%s (%s)' % (pname, str(Z['%s|gid' % f])), transform=ax.transAxes, rotation=90, ha='right', va='center', fontsize=6.5)
         if c == 0: T.label(ax, 'abc'[r], dx=0.02, dy=0.97)
@@ -110,4 +110,4 @@ for r, (f, pname) in enumerate(ROWS):
     if r == 2: axc.set_xlabel('Equiv. diameter (μm)', fontsize=6.5)
     T.label(axc, 'def'[r], dx=-0.25, dy=0.97)
     print(f, str(Z['%s|gid' % f]), ' '.join('%s %.2f/%.2f' % s for s in stats))
-T.save(fig, H / 'fig_pore3d')
+T.save(fig, H / 'fig_pore3d')

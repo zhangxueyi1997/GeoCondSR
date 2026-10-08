@@ -94,7 +94,6 @@ cols = [CS] + [CC] * 6 + [CH] * 2
 ax.barh(y - 0.19, r1, 0.36, color=cols, zorder=2); ax.barh(y + 0.19, r2, 0.36, color=cols, alpha=0.55, zorder=2)
 ax.axvline(1, color='#333333', lw=0.6, ls=(0, (3, 2)))
 ax.set_yticks(y); ax.set_yticklabels(names, fontsize=6); ax.invert_yaxis()
-ax.get_yticklabels()[0].set_color(CS); ax.get_yticklabels()[0].set_fontweight('bold')
-ax.set_xlabel('Median error / sparse-fine error'); ax.set_title(r'Error of whole-rock state (solid: $f_\mathrm{p}$, light: $\bar{u}_\mathrm{p}$)', fontsize=6.3, pad=3)
+ax.set_xlabel('Median error / sparse-fine error')
 T.label(ax, 'c', dx=-0.33)
 T.save(fig, H / 'fig_level_sci')

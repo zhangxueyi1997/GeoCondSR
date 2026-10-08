@@ -48,11 +48,11 @@ def stat(x, tag):
 
 
 MAIN = [('粗扫阈值', 'Coarse threshold', '#9A9A9A', 's'), ('EDSR-3D', 'EDSR-3D', T.C['EDSR-3D'], 'o'), ('SRGAN-3D', 'SRGAN-3D', T.C['SRGAN-3D'], 'D'),
-        ('本文·仅粗扫', 'Ours', T.C['本文'], 'o')]
+        ('本文·仅粗扫', 'GeoCondSR', T.C['本文'], 'o')]
 X = {m: phi(V59, 'cal', m) for m, *_ in MAIN}; S = {m: stat(X[m], '标定 ' + m) for m in X}
 stat(phi(V59, 'cal', '三线性'), '标定 三线性')
 ST = [('No calibration', phi(V54, 'raw', '本文·仅粗扫')), ('+ imaging\ncalibration', phi(V54, 'cal', '本文·仅粗扫')),
-      ('+ noise-aware\ntuning (final)', X['本文·仅粗扫'])]
+      ('+ noise-aware\ntuning', X['本文·仅粗扫'])]
 SS = [stat(x, '本文阶段 ' + t.replace(chr(10), ' ')) for t, x in ST]
 for m in ('EDSR-3D', 'SRGAN-3D', '本文·仅粗扫'):
     stat(phi(V54, 'cal_harm', m), '标定+谱减（无微调）' + m)
@@ -94,16 +94,14 @@ ax.add_patch(Rectangle((140, 140), 224, 224, fill=False, ec='#C0392B', lw=0.8));
 ax.set_title('Coarse window (504 μm)', fontsize=6.5, pad=2); T.label(ax, 'b', dx=-0.08, dy=1.0)
 ax = fig.add_subplot(sub[0, 1]); ax.imshow(w0[10:26, 10:26], cmap='gray', vmin=0, vmax=1.6, interpolation='nearest', extent=(0, 224, 224, 0))
 frame(ax, '#C0392B', 0.8); ax.set_title('Coarse, 224 μm', fontsize=6.5, pad=2)
-for j, (m, t, col) in enumerate([('三线性', 'Trilinear', '#6E6E6E'), ('EDSR-3D', 'EDSR-3D', T.C['EDSR-3D']), ('SRGAN-3D', 'SRGAN-3D', T.C['SRGAN-3D']), ('本文', 'Ours', T.C['本文'])]):
+for j, (m, t, col) in enumerate([('三线性', 'Trilinear', '#6E6E6E'), ('EDSR-3D', 'EDSR-3D', T.C['EDSR-3D']), ('SRGAN-3D', 'SRGAN-3D', T.C['SRGAN-3D']), ('本文', 'GeoCondSR', T.C['本文'])]):
     ax = fig.add_subplot(sub[1, j]) if j < 4 else None
     ax.imshow(Z[m][0], cmap='gray', vmin=0, vmax=1.6, interpolation='nearest', extent=(0, 224, 224, 0))
-    frame(ax); ax.set_title(t, fontsize=6.5, pad=2, color=col)
+    frame(ax); ax.set_title(t, fontsize=6.5, pad=2)
     ax.text(0.04, 0.04, r'$\phi$ %.1f%%' % (100 * float(Z[m + '|phi'][0])), transform=ax.transAxes, fontsize=5.5, color='white', va='bottom')
     if j == 3:
         ax.plot([160, 210], [212, 212], color='white', lw=1.2, solid_capstyle='butt'); ax.text(185, 205, '50 μm', color='white', fontsize=5, ha='center', va='bottom')
 axn = fig.add_subplot(sub[0, 2:]); axn.axis('off')
-axn.text(0.02, 0.62, 'Windows per plug: 300 (6 heights × 50)\nReconstructed volume: 3.4 mm³ per plug\nInput: near-surface air + cupping correction',
-         fontsize=6, va='center', color='#404040', linespacing=1.5)
 
 # (c) 与氦孔隙度
 ax = fig.add_subplot(bot[0, 0])
@@ -127,12 +125,9 @@ for k, (m, t, col, mk) in enumerate(MB):
     st = S[m] if m in S else stat(phi(V59, 'cal', m), '标定 ' + m)
     ax.bar(k - w / 2, 100 * abs(st['bias']), w, color=col, zorder=2)
     ax.bar(k + w / 2, 100 * st['mae'], w, color=col, alpha=0.5, zorder=2)
-    if m == '本文·仅粗扫':
-        ax.text(k, 100 * st['mae'] + 0.25, '%.1f / %.1f' % (100 * abs(st['bias']), 100 * st['mae']), ha='center', va='bottom', fontsize=5.6, color=T.C['本文'], fontweight='bold')
-ax.set_xticks(xb); ax.set_xticklabels(['Tri-\nlinear', 'Coarse\nthresh.', 'EDSR-\n3D', 'SRGAN-\n3D', 'Ours'], fontsize=5.6)
-ax.get_xticklabels()[-1].set_color(T.C['本文']); ax.get_xticklabels()[-1].set_fontweight('bold')
+ax.set_xticks(xb); ax.set_xticklabels(['Tri-\nlinear', 'Coarse\nthresh.', 'EDSR-\n3D', 'SRGAN-\n3D', 'GeoCondSR'], fontsize=5.6)
 ax.set_ylabel('Error vs. small-plug fine scan (pp)'); ax.set_ylim(0, 6.2)
-ax.set_title('solid: |mean bias|, light: mean absolute error', fontsize=5.8, pad=3, color='#555555')
+
 T.label(ax, 'd', dx=-0.2)
 
 # (e) 处理阶段
@@ -157,11 +152,9 @@ if WS:
     xx_ = np.linspace(0, 22, 10); ax.plot(xx_, xx_, color='#BDBDBD', lw=0.6); ax.plot(xx_, xx_ / 2, color='#BDBDBD', lw=0.6, ls=(0, (3, 2)))
     for a, b, c, t in zip(he, y0, y1, tight):
         ax.annotate('', xy=(a, c), xytext=(a, b), arrowprops=dict(arrowstyle='-|>', lw=0.6 if t else 0.4, color='#7B1A14' if t else '#C9A9A6', mutation_scale=5, shrinkA=0, shrinkB=0))
-    ax.scatter(he, y0, s=9, facecolor='white', edgecolor=T.C['本文'], lw=0.6, zorder=3, label='Ours, coarse only (r = %.2f)' % pearsonr(y0, he)[0])
+    ax.scatter(he, y0, s=9, facecolor='white', edgecolor=T.C['本文'], lw=0.6, zorder=3, label='GeoCondSR, coarse only (r = %.2f)' % pearsonr(y0, he)[0])
     ax.scatter(he, y1, s=11, color=T.C['本文+稀疏细扫'], zorder=4, label='+ sparse fine scan (r = %.2f)' % pearsonr(y1, he)[0])
     ax.set_xlim(0, 21.5); ax.set_ylim(0, 15); ax.set_xlabel('Helium porosity (%)'); ax.set_ylabel('SR resolvable porosity (%)')
-    ax.text(1.2, 5.6, 'tight\nsamples', fontsize=5.5, color='#7B1A14', ha='left')
     ax.legend(loc='upper left', fontsize=5.3, handletextpad=0.2, borderaxespad=0.1)
-    ax.set_title('%d plugs with fine-scan calibration' % len(ps), fontsize=6.0, pad=3, color='#555555')
     T.label(ax, 'f', dx=-0.2)
-T.save(fig, H / 'fig_wholecore_app')
+T.save(fig, H / 'fig_wholecore_app')

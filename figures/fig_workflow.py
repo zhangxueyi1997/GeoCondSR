@@ -30,15 +30,13 @@ wv = np.load(P / 'wc_vis59.npz'); sr = wv['本文'][0]; wc = wv['win_cal_mid'][0
 
 fig = plt.figure(figsize=(T.DOUBLE * T.MM, 66 * T.MM))
 W = 1.0; x0s = [0.008, 0.207, 0.406, 0.605, 0.804]; bw = 0.188; y0, bh = 0.09, 0.88
-HEAD = ['1  Dual-resolution imaging', '2  Registration and pairing', '3  Geological state ' + r'$\mathbf{c}$', '4  Network', '5  Core-scale application']
+HEAD = ['Dual-resolution imaging', 'Registration and pairing', 'Geological state ' + r'$\mathbf{c}$', 'Network', 'Whole-plug application']
 for k, x0 in enumerate(x0s):
-    hi = k == 2
-    fig.patches.append(FancyBboxPatch((x0, y0), bw, bh, boxstyle='round,pad=0,rounding_size=0.012', transform=fig.transFigure,
-                                      fc='#FBF1EF' if hi else '#F4F6F8', ec='#C0392B' if hi else '#C9CED6', lw=0.8 if hi else 0.5, zorder=-5))
-    fig.text(x0 + 0.008, y0 + bh - 0.035, HEAD[k], fontsize=7, fontweight='bold', color='#7B1A14' if hi else '#1F2A36', va='top')
+    fig.text(x0 + 0.004, 0.875, 'abcde'[k], fontsize=8.5, fontweight='bold', va='bottom')
+    fig.text(x0 + 0.020, 0.877, HEAD[k], fontsize=7, va='bottom')
     if k < 4:
-        fig.patches.append(FancyArrowPatch((x0 + bw + 0.001, 0.55), (x0s[k + 1] - 0.001, 0.55), transform=fig.transFigure,
-                                           arrowstyle='-|>', mutation_scale=7, lw=0.8, color='#6E6E6E'))
+        fig.patches.append(FancyArrowPatch((x0 + bw - 0.004, 0.63), (x0s[k + 1] + 0.004, 0.63), transform=fig.transFigure,
+                                           arrowstyle='-|>', mutation_scale=7, lw=0.7, color='#6E6E6E'))
 
 
 def thumb(rect, a, ext=None, circle=False, title=None, col='#808080'):
@@ -58,16 +56,14 @@ ax = thumb([x0s[0] + 0.012, 0.47, 0.08, 0.08 * 180 / 66], core, circle=True, tit
 thumb([x0s[0] + 0.105, 0.60, 0.035, 0.035 * 180 / 66], lr[10:26, 10:26], title='14 μm')
 thumb([x0s[0] + 0.145, 0.60, 0.035, 0.035 * 180 / 66], hr, title='2 μm')
 fig.text(x0s[0] + 0.143, 0.555, 'Miniplug', fontsize=5.5, ha='center', color='#404040')
-body(x0s[0], 0.40, 'Core plug Φ25 × 50 mm:' + NL + '  whole-plug scan, 4 sections' + NL + 'Miniplug Φ3 mm:' + NL + '  coarse 14 μm + fine ≈2 μm' + NL + 'Helium porosity (core plug)')
 
 # 2 配准与配对
 thumb([x0s[1] + 0.018, 0.53, 0.07, 0.07 * 180 / 66], lr, title='Coarse, 504 μm')
 a2 = thumb([x0s[1] + 0.105, 0.53, 0.07, 0.07 * 180 / 66], hr, title='Fine, 224 μm')
-body(x0s[1], 0.40, 'Rigid + affine registration,' + NL + '  residual 0.048 coarse voxel' + NL + '2800 pairs from 14 samples' + NL + 'Structure < 31 μm not' + NL + '  recorded by the coarse scan')
 
 # 3 地质状态
 ax = fig.add_axes([x0s[2] + 0.02, 0.535, 0.155, 0.28])
-ax.axvspan(0.52, 1.67, color='#EBDDDA', lw=0)
+ax.axvspan(0.52, 1.67, color='#E8E8E8', lw=0)
 for g, col in (('G01', '#1A1A1A'), ('G19', '#0072B2')):
     ax.plot(cen, np.convolve(hc[g + '_T'], np.ones(5) / 5, 'same') / (e[1] - e[0]), color=col, lw=0.7, label=g)
 ax.axvline(0.5, color='#6E6E6E', lw=0.4, ls=(0, (2, 1.5)))
@@ -76,28 +72,25 @@ ax.set_xticks([0, 0.5, 1, 1.5]); ax.set_xlabel('Fine-scan grey value', fontsize=
 ax.spines['left'].set_visible(False)
 ax.text(0.12, 2.2, FP + ', ' + UP, fontsize=5.8, ha='center'); ax.text(1.85, 2.2, FD, fontsize=5.8, ha='center')
 ax.legend(fontsize=5, loc='lower right', handlelength=1.0, borderaxespad=0.1)
-body(x0s[2], 0.40, 'Pore amount ' + FP + ', pore fineness ' + UP + ',' + NL + '  dense minerals ' + FD + NL + 'Carrier: whole-rock state' + NL + '  (sample-level mean)' + NL + 'Sparse fine scan ≈0.11 mm³' + NL + '  calibrates the state')
 
 # 4 网络
 X = x0s[3]
-def node(x, y, w, t, fc='#FFFFFF', ec='#8A94A3'):
-    fig.patches.append(FancyBboxPatch((x, y), w, 0.075, boxstyle='round,pad=0,rounding_size=0.008', transform=fig.transFigure, fc=fc, ec=ec, lw=0.5))
+def node(x, y, w, t, fc='#FFFFFF', ec='#6E6E6E'):
+    fig.patches.append(FancyBboxPatch((x, y), w, 0.075, boxstyle='square,pad=0', transform=fig.transFigure, fc=fc, ec=ec, lw=0.5))
     fig.text(x + w / 2, y + 0.0375, t, fontsize=5.6, ha='center', va='center')
 def arr(p, q, col='#6E6E6E'):
     fig.patches.append(FancyArrowPatch(p, q, transform=fig.transFigure, arrowstyle='-|>', mutation_scale=5, lw=0.5, color=col))
 node(X + 0.008, 0.735, 0.074, 'Coarse 14 μm')
-node(X + 0.112, 0.735, 0.068, 'State ' + r'$\mathbf{c}$', fc='#FBF1EF', ec='#C0392B')
+node(X + 0.112, 0.735, 0.068, 'State ' + r'$\mathbf{c}$', ec='#C0392B')
 node(X + 0.008, 0.600, 0.074, 'Mean path ' + r'$M$')
-node(X + 0.104, 0.600, 0.076, 'Texture ' + r'$G$', fc='#FBF1EF', ec='#C0392B')
+node(X + 0.104, 0.600, 0.076, 'Texture ' + r'$G$', ec='#C0392B')
 node(X + 0.040, 0.465, 0.110, r'$\mu + r$' + '  →  projection ' + r'$P_H$')
 arr((X + 0.045, 0.735), (X + 0.045, 0.675)); arr((X + 0.146, 0.735), (X + 0.146, 0.675), '#C0392B')
 arr((X + 0.082, 0.6375), (X + 0.104, 0.6375)); arr((X + 0.045, 0.600), (X + 0.070, 0.540)); arr((X + 0.140, 0.600), (X + 0.120, 0.540), '#C0392B')
-body(X, 0.40, 'Where: fixed by the coarse scan' + NL + '  (mean path, hard projection)' + NL + 'What it looks like: set by ' + r'$\mathbf{c}$' + NL + '  (SPADE, amplitude head)')
 
 # 5 整柱应用
-thumb([x0s[4] + 0.018, 0.53, 0.07, 0.07 * 180 / 66], wc[10:26, 10:26], title='Whole plug, 14 μm')
-thumb([x0s[4] + 0.105, 0.53, 0.07, 0.07 * 180 / 66], sr, title='Ours, 2 μm', col='#C0392B')
-body(x0s[4], 0.40, 'Calibration: near-surface air,' + NL + '  cupping, degradation-aware' + NL + '  fine-tuning' + NL + 'Checks: helium porosity' + NL + '  (34 plugs), LBM permeability')
+thumb([x0s[4] + 0.018, 0.53, 0.07, 0.07 * 180 / 66], wc[10:26, 10:26], title='Whole plug' + NL + '14 μm')
+thumb([x0s[4] + 0.105, 0.53, 0.07, 0.07 * 180 / 66], sr, title='GeoCondSR' + NL + '2 μm')
 for ext, kw in (('.pdf', {}), ('.png', {'dpi': 600})):
     fig.savefig((H / 'fig_workflow').with_suffix(ext), bbox_inches='tight', pad_inches=0.01, **kw)
-print('写出 fig_workflow.pdf + png（紧裁）')
+print('写出 fig_workflow.pdf + png（紧裁）')

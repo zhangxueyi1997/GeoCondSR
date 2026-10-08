@@ -72,5 +72,5 @@ OFF = {'G02': (-16, 5), 'G09': (4, -9), 'G15': (4, -9), 'G01': (-18, 5), 'G16': 
 for r, xi, yi in zip(rows, x, y): af.annotate(r['组号'], (xi, yi), xytext=OFF.get(r['组号'], (3, 2)), textcoords='offset points', fontsize=S.PT_NOTE)
 af.text(12.3, 13.0, '1:1', fontsize=S.PT_NOTE, ha='right'); af.text(20.5, 9.2, '1:2', fontsize=S.PT_NOTE, ha='right', color=S.C_GREY)
 af.set_xlim(0, 21); af.set_ylim(0, 14); af.set_xlabel('Laboratory porosity, plug B (%)'); af.set_ylabel('Porosity resolved at 2 μm (%)')
-for a, t in zip(ax + [ae, af], 'abcdef'): S.panel_label(a, '(%s)' % t, dx=-0.02 if a in ax else -0.12)
+for a, t in zip(ax + [ae, af], 'abcdef'): S.panel_label(a, t, dx=-0.02 if a in ax else -0.12)
 S.save(fig, 'fig02_data')

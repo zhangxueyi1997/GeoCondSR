@@ -16,7 +16,7 @@ from matplotlib.gridspec import GridSpec
 
 R = json.load(open(FIGDATA / 'eval/micro59.json', encoding='utf-8'))
 FOLDS = ['CQ', 'SC', 'YN', 'GZ', 'SD', 'SHX']; VOX = 2.0; NV = 112 ** 3
-M = [('细扫', 'Fine scan', '-'), ('三线性', 'Trilinear', '-'), ('EDSR-3D', 'EDSR-3D', '-'), ('SRGAN-3D', 'SRGAN-3D', '-'), ('本文', 'Ours (coarse only)', '-')]
+M = [('细扫', 'Fine scan', '-'), ('三线性', 'Trilinear', '-'), ('EDSR-3D', 'EDSR-3D', '-'), ('SRGAN-3D', 'SRGAN-3D', '-'), ('本文', 'GeoCondSR', '-')]
 AGG = {}
 for k, *_ in M:
     phi = np.concatenate([R[f][k]['phi'] for f in FOLDS]); nb = [len(R[f][k]['phi']) for f in FOLDS]
@@ -48,15 +48,14 @@ axs[1].set_xlabel('Lag r (μm)'); axs[1].set_ylabel('Normalized autocovariance')
 axs[1].text(78, np.exp(-1) + 0.02, '1/e', fontsize=5.5, color='#8A8A8A', ha='right')
 axs[2].set_xscale('log'); axs[2].set_yscale('log'); axs[2].set_xlabel('Pore chord length (μm)'); axs[2].set_ylabel('Probability'); axs[2].set_xlim(2, 200)
 axs[3].set_xscale('log'); axs[3].set_xlabel('Cluster diameter (μm)'); axs[3].set_ylabel('Porosity per size class (%)')
-ax = axs[4]; MM = [('EDSR-3D', 'EDSR'), ('SRGAN-3D', 'SRGAN'), ('本文', 'Ours')]; w = 0.26
+ax = axs[4]; MM = [('EDSR-3D', 'EDSR'), ('SRGAN-3D', 'SRGAN'), ('本文', 'GeoCondSR')]; w = 0.26
 for q, (desc, dn) in enumerate([(0, 'mean\nchord'), (1, 'correl.\nlength'), (2, 'pores\n< 5 μm')]):
     for j, (m, lab) in enumerate(MM):
         e = 100 * abs(STAT[m][desc] - STAT['细扫'][desc]) / STAT['细扫'][desc]
         ax.bar(q + (j - 1) * w, e, w * 0.95, color=T.C[m], zorder=2)
-        if m == '本文': ax.text(q + (j - 1) * w, e + 2, '%d' % round(e), ha='center', va='bottom', fontsize=5.3, color=T.C['本文'], fontweight='bold')
 ax.set_xticks(range(3)); ax.set_xticklabels(['mean\nchord', 'correl.\nlength', 'pores\n< 5 μm'], fontsize=5.6)
 ax.set_ylabel('Relative error vs. fine scan (%)'); ax.set_ylim(0, 130)
 from matplotlib.patches import Patch
 ax.legend(handles=[Patch(color=T.C[m], label=l) for m, l in MM], fontsize=5.5, loc='upper right', handlelength=1.0)
 for ax, lab in zip(axs, 'abcde'): T.label(ax, lab, dx=-0.22)
-T.save(fig, H / 'fig_micro')
+T.save(fig, H / 'fig_micro')

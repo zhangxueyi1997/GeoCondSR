@@ -19,7 +19,7 @@ RAD = np.load(D / 'fig11_radial.npz')
 FOLDS = ['CQ', 'SC', 'YN', 'GZ', 'SD', 'SHX']
 NZ = {f: json.load(open(D / 'out' / ('noise59_%s.json' % f), encoding='utf-8')) for f in FOLDS}
 NZn = {f: json.load(open(D / 'out' / ('noise59_%s_n59n.json' % f), encoding='utf-8')) for f in FOLDS if (D / 'out' / ('noise59_%s_n59n.json' % f)).exists()}
-F = sorted(D.glob('agg_plug59_n59n_cup.json')); HAVE_D = bool(F)          # (d) 整柱结果齐了才画 2×2，否则一行三块
+F = sorted(D.glob('agg_plug59_n59n_cup.json')); HAVE_D = False   # 整柱结果已在 fig_wholecore_app (c)，此处不重复          # (d) 整柱结果齐了才画 2×2，否则一行三块
 if HAVE_D: fig, axs = S.figure(S.DOUBLE, height_mm=125, nrows=2, ncols=2, constrained_layout=True); AX = list(axs.ravel())
 else: fig, axs = S.figure(S.DOUBLE, height_mm=68, nrows=1, ncols=3, constrained_layout=True); AX = list(axs)
 # (a)
@@ -43,16 +43,16 @@ for i, f in enumerate(FOLDS):
     if f in NZn: ax.bar(i + 1.5 * W, np.mean(NZn[f]['加噪']['本文·仅粗扫']), W, color='#7a0019', lw=0)
     ax.plot([i - 2 * W, i + 2 * W], [t, t], color='k', lw=1.2)
 ax.set_xticks(range(len(FOLDS))); ax.set_xticklabels(FOLDS); ax.set_ylabel('2-μm porosity')
-for lab, c, al in (('Ours, clean', '#c8102e', 1.0), ('Ours, noisy', '#c8102e', 0.45), ('EDSR-3D, noisy', '#1f6fb4', 0.6), ('Noise-aware ours, noisy', '#7a0019', 1.0)):
+for lab, c, al in (('GeoCondSR, clean', '#c8102e', 1.0), ('GeoCondSR, noisy', '#c8102e', 0.45), ('EDSR-3D, noisy', '#1f6fb4', 0.6), ('GeoCondSR noise-aware, noisy', '#7a0019', 1.0)):
     ax.bar([np.nan], [np.nan], color=c, alpha=al, label=lab)
-ax.plot([], [], color='k', lw=1.2, label='Fine scan'); ax.set_ylim(0, 0.26)
-ax.legend(fontsize=6.3, loc='upper center', ncol=2, handlelength=1.2, columnspacing=0.8, handletextpad=0.4)
+ax.plot([], [], color='k', lw=1.2, label='Fine scan'); ax.set_ylim(0, 0.33)
+ax.legend(fontsize=6.0, loc='upper left', ncol=1, handlelength=1.2, handletextpad=0.4, borderaxespad=0.2)
 # (d) 整柱超分孔隙率与氦孔隙度（整柱标定结果齐了才画）
 if HAVE_D:
     ax = AX[3]; rows = json.load(open(F[0], encoding='utf-8')); A = [r for r in rows if r['main']]
-    for key, lab, c, mk in (('cal|本文·仅粗扫', 'Ours (calibrated, noise-aware)', '#c8102e', 'o'), ('cal|EDSR-3D', 'EDSR-3D (calibrated)', '#1f6fb4', 's'), ('cal|粗扫阈值', '14-μm threshold', '#888', '^')):
+    for key, lab, c, mk in (('cal|本文·仅粗扫', 'GeoCondSR (calibrated, noise-aware)', '#c8102e', 'o'), ('cal|EDSR-3D', 'EDSR-3D (calibrated)', '#1f6fb4', 's'), ('cal|粗扫阈值', '14-μm threshold', '#888', '^')):
         ax.scatter([100 * r['he'] for r in A], [100 * r[key] for r in A], s=14, color=c, marker=mk, label=lab, lw=0)
     x = np.linspace(0, 22, 10); ax.plot(x, x, 'k-', lw=0.7); ax.plot(x, 0.5 * x, 'k:', lw=0.7)
     ax.set_xlabel('Helium porosity (%)'); ax.set_ylabel('Whole-plug 2-μm porosity (%)'); ax.legend(fontsize=7, loc='upper left')
-for ax, t in zip(AX, 'abcd'): S.panel_label(ax, '(%s)' % t, dx=-0.16 if HAVE_D else -0.22)
+for ax, t in zip(AX, 'abcd'): S.panel_label(ax, t, dx=-0.16 if HAVE_D else -0.22)
 S.save(fig, 'fig11_wholecore')

@@ -25,8 +25,8 @@ M = [('Trilinear', '三线性', lambda f: A[f]['三线性'], 0.0, 's'),
      ('EDSR-3D', 'EDSR-3D', lambda f: A[f]['EDSR-3D'], 3.74, 'o'),
      ('SRGAN-3D', 'SRGAN-3D', lambda f: A[f]['SRGAN-3D'], 3.74, 'D'),
      ('Mean path only', '均值通路', lambda f: A[f]['仅均值通路'], 3.76, 'v'),
-     ('Ours (coarse only)', '本文', lambda f: A[f]['新·无地质'], 4.97, 'o'),
-     ('Ours + sparse fine', '本文+稀疏细扫', lambda f: B[f]['本文·粗扫+稀疏细扫'], 4.97, 'P')]
+     ('GeoCondSR', '本文', lambda f: A[f]['新·无地质'], 4.97, 'o'),
+     ('GeoCondSR + sparse fine', '本文+稀疏细扫', lambda f: B[f]['本文·粗扫+稀疏细扫'], 4.97, 'P')]
 F59 = E / 'eval59' / 'eval59_CQ.json'
 if F59.exists():
     C = {f: json.load(open(E / 'eval59' / ('eval59_%s.json' % f), encoding='utf-8')) for f in FOLDS}
@@ -52,26 +52,24 @@ for nm, ck, get, par, mk in M:
                label='%s  (%s)' % (nm, '%.2f M' % par if par else 'no parameters'))
 ax.set_yscale('log'); ax.set_ylim(0.12, 1.4)
 ax.set_yticks([0.2, 0.3, 0.5, 1.0]); ax.set_yticklabels(['0.2', '0.3', '0.5', '1.0']); ax.yaxis.set_minor_formatter(plt.NullFormatter())
-ax.set_xlabel('PSNR (dB)  →  less pixel distortion'); ax.set_ylabel('Structure error index (vs. trilinear)  ↓ better')
+ax.set_xlabel('PSNR (dB)'); ax.set_ylabel('Structure error index')
 ax.legend(loc='upper left', fontsize=5.8, handletextpad=0.3, borderaxespad=0.2, markerscale=0.8)
-ax.annotate('', xy=(22.9, 0.14), xytext=(22.2, 0.2), arrowprops=dict(arrowstyle='-|>', color='#9A9A9A', lw=0.6, mutation_scale=6))
-ax.text(22.95, 0.135, 'ideal', fontsize=5.8, color='#7A7A7A', ha='left', va='center')
 T.label(ax, 'a', dx=-0.09)
 
 # (b) 逐折：本文相对 EDSR-3D / SRGAN-3D
 ax = fig.add_subplot(gs[0, 1])
-ax.axhspan(0.05, 1, xmin=0, xmax=1, color='#F7ECEA', lw=0, zorder=0)
-ps0, si0 = PTS['Ours (coarse only)']
+ax.axhspan(0.05, 1, xmin=0, xmax=1, color='#EFEFEF', lw=0, zorder=0)
+ps0, si0 = PTS['GeoCondSR']
 for base, col in (('EDSR-3D', T.C['EDSR-3D']), ('SRGAN-3D', T.C['SRGAN-3D'])) + ((('Diffusion 3D', T.C['扩散']),) if 'Diffusion 3D' in PTS else ()):
     pb, sb = PTS[base]; dp, rs = ps0 - pb, si0 / sb
     for f, x, y in zip(FOLDS, dp, rs):
         ax.scatter(x, y, marker=T.FOLD_MK[f], s=16, color=col, edgecolor='white', lw=0.4, zorder=3)
-    ax.scatter([], [], marker='o', s=16, color=col, label='Ours vs. ' + base)
+    ax.scatter([], [], marker='o', s=16, color=col, label='GeoCondSR vs. ' + base)
     print('相对 %s：ΔPSNR %s，结构指数比 %s' % (base, np.round(dp, 2), np.round(rs, 2)))
 ax.axhline(1, color='#9A9A9A', lw=0.6); ax.axvline(0, color='#9A9A9A', lw=0.6)
 ax.set_yscale('log'); ax.set_ylim(0.15, 1.6); ax.set_xlim(-4, 1.5)
 ax.set_yticks([0.2, 0.3, 0.5, 1.0]); ax.set_yticklabels(['0.2', '0.3', '0.5', '1.0']); ax.yaxis.set_minor_formatter(plt.NullFormatter())
-ax.set_xlabel(r'$\Delta$PSNR, ours − baseline (dB)'); ax.set_ylabel('Structure error index ratio')
+ax.set_xlabel(r'$\Delta$PSNR, GeoCondSR − baseline (dB)'); ax.set_ylabel('Structure error index ratio')
 ax.legend(loc='upper left', fontsize=5.8, handletextpad=0.3, borderaxespad=0.2)
 from matplotlib.lines import Line2D
 PN = {'CQ': 'Chongqing', 'SC': 'Sichuan', 'YN': 'Yunnan', 'GZ': 'Guizhou', 'SD': 'Shandong', 'SHX': 'Shaanxi'}
@@ -79,4 +77,4 @@ leg1 = ax.get_legend(); ax.add_artist(leg1)
 ax.legend(handles=[Line2D([], [], ls='none', marker=T.FOLD_MK[f], ms=3.5, color='#6E6E6E', label=PN[f]) for f in FOLDS], loc='lower right', ncol=2, fontsize=5.4,
           handletextpad=0.2, columnspacing=0.6, borderaxespad=0.2, title='test region', title_fontsize=5.4)
 T.label(ax, 'b', dx=-0.16)
-T.save(fig, H / 'fig_pdplane')
+T.save(fig, H / 'fig_pdplane')

@@ -19,7 +19,7 @@ P, G = Z['sweep|phi'], Z['sweep|gid']
 FP, UP = r'$f_\mathrm{p}$', r'$\bar{u}_\mathrm{p}$'
 SHOW = ['G11', 'G12', 'G19', 'G01', 'G06']
 fig = plt.figure(figsize=(T.DOUBLE * T.MM, 100 * T.MM))
-gt = GridSpec(1, 7, figure=fig, left=0.012, right=0.988, top=0.90, bottom=0.535, wspace=0.05)
+gt = GridSpec(1, 7, figure=fig, left=0.012, right=0.988, top=0.94, bottom=0.575, wspace=0.05)
 gb = GridSpec(1, 3, figure=fig, left=0.06, right=0.935, top=0.44, bottom=0.09, wspace=0.46, width_ratios=[0.8, 1.25, 1.0])
 
 
@@ -39,7 +39,6 @@ for k, g in enumerate(SHOW):
     img(ax, Z['ctrl|%s|mid' % g], 'state of %s' % g, FP + ' %.1f%%, ' % (100 * C[q, 1]) + UP + ' %.2f' % C[q, 2] + chr(10) + r'output $\phi$ = %.1f%%' % (100 * ph),
         col='#C0392B' if g == 'G01' else '#222222')
 ax = fig.add_subplot(gt[0, 6]); img(ax, Z['arch|hr|mid'], 'Fine scan', '2 μm' + chr(10) + r'$\phi$ = %.1f%%' % (100 * float(Z['ctrl|hr_phi'][0])))
-fig.text(0.5, 0.955, 'Same coarse block (G01) and same noise; only the geological state c is replaced', ha='center', fontsize=6.5, color='#444444')
 
 # (b) 差图
 ax = fig.add_subplot(gb[0, 0])
@@ -80,4 +79,4 @@ ax.set_xlabel('State ' + FP + ' (%)'); ax.set_ylabel('Mean output porosity (%)')
 ax.text(0.04, 0.96, r'Spearman $\rho$ = %.2f' % rho + chr(10) + '14 states, 40 blocks', transform=ax.transAxes, va='top', fontsize=5.8)
 T.label(ax, 'd', dx=-0.2)
 print('逐块 Spearman 中位 %.3f（%d 块）；均值曲线 Spearman %.3f；输出孔隙率 %.2f%%–%.2f%%；逐块极差中位 %.2f pp' % (np.median(res), len(res), rho, m.min(), m.max(), 100 * np.median(P.max(1) - P.min(1))))
-T.save(fig, H / 'fig_geoctrl')
+T.save(fig, H / 'fig_geoctrl')

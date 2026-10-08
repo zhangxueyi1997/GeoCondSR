@@ -37,9 +37,9 @@ asp = [pics[k].width / pics[k].height for k in 'bcde']
 fig = plt.figure(figsize=(S.DOUBLE / 25.4, 0.1)); W_mm = S.DOUBLE
 h1 = W_mm * mos.height / mos.width; h2 = W_mm / sum(asp); fig.set_size_inches(W_mm / 25.4, (h1 + h2 + 11) / 25.4)
 gs = GridSpec(2, 4, figure=fig, height_ratios=[h1, h2], width_ratios=asp, hspace=0.10, wspace=0.04, left=0.01, right=0.99, top=0.955, bottom=0.01)
-ax = fig.add_subplot(gs[0, :]); ax.imshow(np.asarray(mos)); ax.axis('off'); ax.text(0.0, 1.01, '(a)', transform=ax.transAxes, fontsize=10, fontweight='bold', va='bottom')
+ax = fig.add_subplot(gs[0, :]); ax.imshow(np.asarray(mos)); ax.axis('off'); ax.text(0.0, 1.01, 'a', transform=ax.transAxes, fontsize=10, fontweight='bold', va='bottom')
 for j, k in enumerate('bcde'):
     ax = fig.add_subplot(gs[1, j]); ax.imshow(np.asarray(pics[k])); ax.axis('off')
-    ax.text(0.0, 1.02, '(%s)' % k, transform=ax.transAxes, fontsize=10, fontweight='bold', va='bottom')
+    ax.text(0.0, 1.02, k, transform=ax.transAxes, fontsize=10, fontweight='bold', va='bottom')
 fig.savefig(H / 'fig01_samples.png', dpi=300); fig.savefig(H / 'fig01_samples.pdf', dpi=300)
 print('岩心柱', len(tiles), '张；画幅 %.0f × %.0f mm' % (W_mm, h1 + h2 + 8))

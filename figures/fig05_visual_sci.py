@@ -18,7 +18,7 @@ d = np.load(FIGDATA / 'vis_paper.npz')
 FOLDS = ['CQ', 'SC', 'YN', 'GZ', 'SD', 'SHX']
 PN = {'CQ': 'Chongqing', 'SC': 'Sichuan', 'YN': 'Yunnan', 'GZ': 'Guizhou', 'SD': 'Shandong', 'SHX': 'Shaanxi'}
 COLS = [('粗扫', 'Coarse 14 μm', '#6E6E6E'), ('三线性', 'Trilinear', '#6E6E6E'), ('EDSR-3D', 'EDSR-3D', T.C['EDSR-3D']), ('SRGAN-3D', 'SRGAN-3D', T.C['SRGAN-3D']),
-        ('本文·无地质', 'Ours', T.C['本文']), ('本文·粗扫+稀疏细扫', 'Ours + sparse fine', T.C['本文+稀疏细扫']), ('真值', 'Fine scan 2 μm', '#1A1A1A')]
+        ('本文·无地质', 'GeoCondSR', T.C['本文']), ('本文·粗扫+稀疏细扫', 'GeoCondSR +' + chr(10) + 'sparse fine', T.C['本文+稀疏细扫']), ('真值', 'Fine scan 2 μm', '#1A1A1A')]
 fig = plt.figure(figsize=(T.DOUBLE * T.MM, 142 * T.MM))
 gs = GridSpec(len(FOLDS), 9, figure=fig, left=0.035, right=0.995, top=0.955, bottom=0.01, wspace=0.05, hspace=0.07,
               width_ratios=[1.15, 0.12] + [1] * 7)
@@ -40,9 +40,8 @@ for i, f in enumerate(FOLDS):
     for j, (k, t, col) in enumerate(COLS):
         ax = fig.add_subplot(gs[i, j + 2]); a = d['%s|%s' % (f, k)]
         a = a[4:12, 4:12] if a.shape[0] == 16 else a[28:84, 28:84]
-        ax.imshow(a, cmap='gray', vmin=0, vmax=1.6, interpolation='nearest', extent=(0, 112, 112, 0)); frame(ax, '#E03A2F', 0.6)
-        if i == 0: ax.set_title(t, fontsize=6.3, pad=2.5, color=col, fontweight='bold' if k.startswith('本文') else 'normal')
+        ax.imshow(a, cmap='gray', vmin=0, vmax=1.6, interpolation='nearest', extent=(0, 112, 112, 0)); frame(ax)
+        if i == 0: ax.set_title(t, fontsize=6.3, pad=2.5)
         if i == len(FOLDS) - 1 and j == len(COLS) - 1:
             ax.plot([80, 100], [104, 104], color='white', lw=1.3, solid_capstyle='butt'); ax.text(90, 100, '20 μm', color='white', fontsize=5.3, ha='center', va='bottom')
-fig.text(0.61, 0.985, 'Enlarged: central 112 μm of each block (red box)', ha='center', va='top', fontsize=6.3, color='#E03A2F')
-T.save(fig, H / 'fig05_visual_sci')
+T.save(fig, H / 'fig05_visual_sci')

@@ -13,7 +13,7 @@ SINGLE, ONEHALF, DOUBLE = 88, 120, 180
 C = {'三线性': '#B7B7B7', 'EDSR-3D': '#3E6FA8', 'SRGAN-3D': '#D9A23F', 'SwinIR-3D': '#5A9E5A', '扩散': '#8A6DB0',
      '均值通路': '#8FB8DE', '本文': '#C0392B', '本文+稀疏细扫': '#7B1A14', '细扫': '#222222'}
 EN = {'三线性': 'Trilinear', 'EDSR-3D': 'EDSR-3D', 'SRGAN-3D': 'SRGAN-3D', 'SwinIR-3D': 'SwinIR-3D', '扩散': 'Diffusion',
-      '均值通路': 'Mean path', '本文': 'Ours', '本文+稀疏细扫': 'Ours + sparse fine', '细扫': 'Fine scan'}
+      '均值通路': 'Mean path', '本文': 'GeoCondSR', '本文+稀疏细扫': 'GeoCondSR + sparse fine', '细扫': 'Fine scan'}
 GREY, LIGHT = '#6E6E6E', '#D9D9D9'
 FOLD_MK = {'CQ': 'o', 'SC': 's', 'YN': '^', 'GZ': 'D', 'SD': 'v', 'SHX': 'P'}
 
