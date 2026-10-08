@@ -60,7 +60,8 @@ print('细扫与氦（26 根）r %.3f ρ %.3f' % (pearsonr(FI[OK], HE[OK])[0], s
 
 # ---------- 图像 ----------
 Z = np.load(P / 'wc_vis59.npz'); c = np.load(P / 'cup/CQ-1.npz'); d = np.load(P / 'CQ-1.npz')
-files = sorted((RAW_ROOT / 'G01' / 'large_ct' / 'raw16').glob('*.tif')); z0 = int(c['pos'][0, 0]); img = fastio.read(files[z0 + 18]).astype(np.float32)
+files = sorted((RAW_ROOT / 'G01' / 'large_ct' / 'raw16').glob('*.tif')); z0 = int(c['pos'][0, 0])   # without the raw slices, use the copy of this slice in the figure data
+img = (fastio.read(files[z0 + 18]) if files else np.load(FIGDATA / 'plugs' / 'CQ-1_slice.npy')).astype(np.float32)
 a0, D0, an = float(c['air']), float(c['D']), float(c['air_near']); Dn = a0 + D0 - an
 yy, xx = np.indices(img.shape); rr = np.hypot(yy - float(c['cy']), xx - float(c['cx'])) / float(c['R'])
 g = np.polyval(c['coef'], np.clip(rr, 0, 0.88) ** 2); gn = (g * D0 + a0 - an) / Dn

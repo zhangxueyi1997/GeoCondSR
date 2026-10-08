@@ -44,12 +44,13 @@ pip install -r requirements.txt
 
 ## Data and pretrained models
 
-The paired dataset, the whole-plug context windows and the trained models are archived on Zenodo: https://doi.org/10.5281/zenodo.23219071 (CC BY 4.0). Download them and either place them in `data/` and `runs/` inside the repository or point the environment variables to their location:
+The paired dataset, the whole-plug context windows, the trained models and the aggregated results behind the figures are archived on Zenodo: https://doi.org/10.5281/zenodo.23219071 (CC BY 4.0). Download them and either place them in `data/` and `runs/` inside the repository or point the environment variables to their location:
 
 ```bash
-export GEOCOND_DATA=/path/to/data      # paired blocks and derived inputs
-export GEOCOND_RUNS=/path/to/runs      # model checkpoints
-export GEOCOND_OUT=/path/to/outputs    # evaluation outputs (created automatically)
+export GEOCOND_DATA=/path/to/data                # paired blocks and derived inputs
+export GEOCOND_RUNS=/path/to/runs                # model checkpoints
+export GEOCOND_OUT=/path/to/outputs              # evaluation outputs (created automatically)
+export GEOCOND_FIGDATA=/path/to/figure_data      # aggregated results read by the figure scripts
 ```
 
 Expected layout of `GEOCOND_DATA`:
@@ -101,7 +102,22 @@ Run the experiment folders in this order; each `run.sh` loops over the six folds
 | `experiments/06_whole_plug` | imaging-condition calibration and whole-plug application |
 | `figures/` | figures and tables drawn from the aggregated outputs |
 
-The scripts in `preprocessing/` start from the raw TIFF slices and rebuild the released dataset: registration in `preprocessing/registration/`, then `hkernel.py`, `cfield2.py`, `export_pairs.py` and `pack_for_gpu.py`.
+### Figures and tables
+
+The figure scripts read the aggregated results in `GEOCOND_FIGDATA`. With the `figure_data/` folder from Zenodo every figure and table of the paper can be redrawn directly, without rerunning the experiments:
+
+```bash
+cd figures
+python tab01_samples.py                      # first: writes tab01_samples.csv, used by several figure scripts
+python agg_lbm59.py; python agg_plug59.py; python agg_wcsparse.py
+for f in fig*.py tab02*.py tab04*.py; do python $f; done
+```
+
+The exception is the figure with photographs of the samples (`fig01_samples.py`), whose photographs are not part of the data release. `fig11_data.py` recomputes the radial gray-level profiles shown by `fig11_wholecore.py` from the raw whole-plug slices; its output is already in `figure_data/`. After rerunning the experiments, copy their result files into the same layout as `figure_data/` to redraw the figures from your own results.
+
+### Preprocessing
+
+The scripts in `preprocessing/` start from the raw TIFF slices and rebuild the released dataset: registration in `preprocessing/registration/`, then `hkernel.py`, `cfield2.py`, `export_pairs.py` and `pack_for_gpu.py`. They read the raw scans from `GEOCOND_RAW_PROJECT` (`dataset/<sample>/small_ct/raw16/`, fine scans), `GEOCOND_RAW_COARSE` (14-μm miniplug scans) and `GEOCOND_RAW` (`<sample>/large_ct/raw16/`, whole-plug scans), and write intermediate products to `GEOCOND_WORK`. The raw slices (more than 600 GB) are not in the Zenodo archive; they are available from the corresponding author on reasonable request.
 
 ## License
 

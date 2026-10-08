@@ -18,7 +18,7 @@ def q(W): return np.percentile(W.astype(np.float32), [2, 10, 50, 90, 98])
 res = {}
 print('频带中心（周/粗体素）', np.round((edges[:-1] + edges[1:]) / 2, 3))
 for g in ['G01', 'G02', 'G03', 'G05', 'G06', 'G07', 'G09', 'G11', 'G12', 'G13', 'G15', 'G16', 'G17', 'G19']:
-    fs = sorted(glob.glob(str(DATA_ROOT) + '/pairs_npz/%s/*.npz' % g)); idx = np.random.default_rng(0).choice(len(fs), min(150, len(fs)), replace=False)
+    fs = sorted(glob.glob(str(DATA_ROOT) + '/pairs/%s/*.npz' % g)); idx = np.random.default_rng(0).choice(len(fs), min(150, len(fs)), replace=False)
     Ws = np.stack([np.load(fs[i])['lr'] for i in idx]); Wl = np.load(P + A[g] + '.npz')['win'][::2]
     ps, pl = psd(Ws), psd(Wl); res[g] = dict(ps=ps.tolist(), pl=pl.tolist(), qs=q(Ws).tolist(), ql=q(Wl).tolist())
     print(g, A[g], '分位 小 %s | 大 %s' % (np.round(q(Ws), 3), np.round(q(Wl), 3)))

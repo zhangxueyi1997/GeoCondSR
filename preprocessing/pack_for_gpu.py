@@ -15,9 +15,9 @@
   meta/         留一岩性划分、逐样品几何元信息
 
 用法
-    python code/pack_for_gpu.py --dest F:\\p3bundle          # 拷到移动硬盘
-    python code/pack_for_gpu.py --dest F:\\p3bundle --dry    # 只算体积与清单，不拷
-    python code/pack_for_gpu.py --dest ... --verify          # 拷完后校验
+    python preprocessing/pack_for_gpu.py --dest /path/to/data          # 拷到目标目录
+    python preprocessing/pack_for_gpu.py --dest /path/to/data --dry    # 只算体积与清单，不拷
+    python preprocessing/pack_for_gpu.py --dest ... --verify           # 拷完后校验
 """
 from __future__ import annotations
 import os
@@ -27,7 +27,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 PROJ = Path(os.environ.get('GEOCOND_WORK', str(HERE.parent / 'work')))   # intermediate preprocessing products
 RES = PROJ / "results"
-PAIRS = Path(r"D:\paper3_pairs")
+PAIRS = PROJ / "pairs_npz"   # output of export_pairs.py
 
 # (包内目录, 源, 通配, 说明)
 PARTS = [

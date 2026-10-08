@@ -37,7 +37,7 @@ for g in G:
     BLK[g], MEAN[g], UHI[g] = v, v.mean(0), float(d['norm'][3])
 LAB = {r['组号']: r for r in csv.DictReader(open(H / 'tab01_samples.csv', encoding='utf-8-sig'))}
 HE = {g: float(LAB[g]['实验室孔隙度_B']) for g in G}
-hc = np.load(str(DATA_ROOT / 'hist_cache.npz'))
+hc = np.load(str(FIGDATA / 'hist_cache.npz'))
 edges = np.linspace(-0.5, 2.5, 601); cen = (edges[:-1] + edges[1:]) / 2; bw = edges[1] - edges[0]
 z1 = np.load(FIGDATA / 'fig2_G01.npz'); vp = np.load(FIGDATA / 'vis_paper.npz')
 IMG = {('G01', 'lr'): z1['lr'][18, 10:26, 10:26], ('G01', 'hr'): z1['hr'][56],

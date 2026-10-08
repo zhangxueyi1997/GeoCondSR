@@ -64,8 +64,8 @@ CACHE = PROJ / "cache"
 sys.path.insert(0, str(HERE))
 import fastio, centre, compose
 
-DATA = Path(r"E:\1")
-COARSE = Path(r"E:\xiaoyuanzhu14")
+DATA = Path(os.environ.get('GEOCOND_RAW_PROJECT', 'raw_project'))   # contains dataset/<group>/small_ct/raw16 (fine scans)
+COARSE = Path(os.environ.get('GEOCOND_RAW_COARSE', 'raw_coarse'))   # coarse (14 um) miniplug scans
 V_COARSE = 14.0
 PORE_CUT = 0.50            # 物理判据：空气电平与骨架主峰的中点
 K_W = 2.2                  # 骨架窗 = 主峰 ± K_W 倍半高半宽

@@ -17,14 +17,15 @@ NL = chr(10)
 FP, UP, FD = r'$f_\mathrm{p}$', r'$\bar{u}_\mathrm{p}$', r'$f_\mathrm{d}$'
 # ---------- 缩略图数据 ----------
 P = FIGDATA / 'plugs'; c = np.load(P / 'cup/CQ-1.npz')
-files = sorted((RAW_ROOT / 'G01' / 'large_ct' / 'raw16').glob('*.tif')); img = fastio.read(files[int(c['pos'][0, 0]) + 18]).astype(np.float32)
+files = sorted((RAW_ROOT / 'G01' / 'large_ct' / 'raw16').glob('*.tif'))   # without the raw slices, use the copy of this slice in the figure data
+img = (fastio.read(files[int(c['pos'][0, 0]) + 18]) if files else np.load(FIGDATA / 'plugs' / 'CQ-1_slice.npy')).astype(np.float32)
 a0, D0, an = float(c['air']), float(c['D']), float(c['air_near']); Dn = a0 + D0 - an
 yy, xx = np.indices(img.shape); rr = np.hypot(yy - float(c['cy']), xx - float(c['cx'])) / float(c['R'])
 gn = (np.polyval(c['coef'], np.clip(rr, 0, 0.88) ** 2) * D0 + a0 - an) / Dn
 core = (img - an) / Dn / np.where(rr <= 1.0, gn, 1.0); R = float(c['R']); h = int(R * 1.04); cy, cx = int(c['cy']), int(c['cx'])
 core = core[cy - h:cy + h, cx - h:cx + h]
 z1 = np.load(FIGDATA / 'fig2_G01.npz'); lr, hr = z1['lr'][18], z1['hr'][56]
-hc = np.load(str(DATA_ROOT / 'hist_cache.npz')); e = np.linspace(-0.5, 2.5, 601); cen = (e[:-1] + e[1:]) / 2
+hc = np.load(str(FIGDATA / 'hist_cache.npz')); e = np.linspace(-0.5, 2.5, 601); cen = (e[:-1] + e[1:]) / 2
 wv = np.load(P / 'wc_vis59.npz'); sr = wv['本文'][0]; wc = wv['win_cal_mid'][0]
 
 fig = plt.figure(figsize=(T.DOUBLE * T.MM, 66 * T.MM))

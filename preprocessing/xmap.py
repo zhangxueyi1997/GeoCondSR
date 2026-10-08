@@ -39,7 +39,7 @@ CACHE = PROJ / "cache"
 sys.path.insert(0, str(HERE))
 import compose, affinefit
 
-DATA = Path(r"E:\1")
+DATA = Path(os.environ.get('GEOCOND_RAW_PROJECT', 'raw_project'))   # contains dataset/<group>/small_ct/raw16 (fine scans)
 
 
 def shapes(meta, nfiles):

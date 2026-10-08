@@ -4,9 +4,9 @@
 import sys, glob
 from pathlib import Path
 import numpy as np
-import fastio, tir
 sys.stdout.reconfigure(encoding='utf-8')
 import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../src')); sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../preprocessing')); from paths import REPO_ROOT, DATA_ROOT, RUNS_ROOT, OUT_ROOT, RAW_ROOT, FIGDATA  # noqa: E402
+import fastio, tir  # noqa: E402  (after preprocessing/ is on the path)
 H = Path(__file__).resolve().parent; P = DATA_ROOT / 'plugs'; ROOT = REPO_ROOT
 import csv
 DIRS = {r['large_sample_id']: RAW_ROOT / r['group_id'] / 'large_ct' / 'raw16' for r in csv.DictReader(open(REPO_ROOT / 'configs' / 'sample_mapping.csv', encoding='utf-8-sig'))}

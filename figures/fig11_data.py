@@ -4,13 +4,13 @@
 import sys
 from pathlib import Path
 import numpy as np
-import fastio
 sys.stdout.reconfigure(encoding='utf-8')
 import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../src')); sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../preprocessing')); from paths import REPO_ROOT, DATA_ROOT, RUNS_ROOT, OUT_ROOT, RAW_ROOT, FIGDATA  # noqa: E402
+import fastio  # noqa: E402  (after preprocessing/ is on the path)
 H = Path(__file__).resolve().parent; P = FIGDATA / 'plugs'
 rb = np.arange(0.0, 1.6, 0.02); out = {'rb': rb + 0.01}
 for pid, g in (('CQ-1', 'G01'), ('GZ-1', 'G02'), ('SC-13', 'G06')):
-    z = np.load(P / (pid + '.npz')); air, D, R, cy, cx, n = [float(z[k]) for k in ('air', 'D', 'R', 'cy', 'cx', 'n')]
+    z = np.load(DATA_ROOT / 'plugs' / (pid + '.npz')); air, D, R, cy, cx, n = [float(z[k]) for k in ('air', 'D', 'R', 'cy', 'cx', 'n')]
     fs = sorted(Path(str(RAW_ROOT) + '/%s/large_ct/raw16' % g).glob('*.tif')); prof = []
     for q in (0.3, 0.5, 0.7):
         u = (fastio.read(fs[int(n * q)]).astype(np.float32) - air) / D; yy, xx = np.indices(u.shape); rr = np.hypot(yy - cy, xx - cx) / R

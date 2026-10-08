@@ -8,9 +8,9 @@
 import sys, re, csv, time
 from pathlib import Path
 import numpy as np
-import fastio, tir
 sys.stdout.reconfigure(encoding='utf-8')
 import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../src')); sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../preprocessing')); from paths import REPO_ROOT, DATA_ROOT, RUNS_ROOT, OUT_ROOT, RAW_ROOT, FIGDATA  # noqa: E402
+import fastio, tir  # noqa: E402  (after preprocessing/ is on the path)
 H = Path(__file__).resolve().parent; P = DATA_ROOT / 'plugs'; O = P / 'cup'; O.mkdir(exist_ok=True)
 ROOT = REPO_ROOT
 PLUGS = []

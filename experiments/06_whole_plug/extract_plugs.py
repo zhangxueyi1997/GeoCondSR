@@ -6,9 +6,9 @@
 import sys, re, json, time
 from pathlib import Path
 import numpy as np
-import fastio, centre, tir
 sys.stdout.reconfigure(encoding='utf-8')
 import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../src')); sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../preprocessing')); from paths import REPO_ROOT, DATA_ROOT, RUNS_ROOT, OUT_ROOT, RAW_ROOT, FIGDATA  # noqa: E402
+import fastio, centre, tir  # noqa: E402  (after preprocessing/ is on the path)
 H = Path(__file__).resolve().parent; OUT = DATA_ROOT / 'plugs'; OUT.mkdir(parents=True, exist_ok=True)
 ROOT = REPO_ROOT; VOX_MM = 0.01393
 src = (REPO_ROOT / 'configs' / 'sample_properties.py').read_text(encoding='utf-8')
