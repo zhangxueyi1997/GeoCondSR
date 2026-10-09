@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sample-level geological state: sparse fine-scan calibration and its alternatives (Sections 4.3-4.4).
+# Sample-level geological state: sparse fine-scan calibration and its alternatives (Section 4.2).
 set -e
 cd "$(dirname "$0")"
 GPU=${GPU:-0}

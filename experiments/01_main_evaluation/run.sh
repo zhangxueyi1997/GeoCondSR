@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Evaluation of the geological-state sources (Section 4.3, Table 3).
+# Evaluation of the geological-state sources (Section 4.2, Supplementary Table S2).
 # C_MODE selects how the geological state of the geology-conditioned generator is obtained:
 #   pred  predicted from the coarse scan                       (model _g54c)
 #   nbr   regression on neighbouring fine-scan statistics      (model _g54n; needs nbr55.py first)

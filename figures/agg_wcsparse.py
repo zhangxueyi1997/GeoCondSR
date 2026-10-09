@@ -15,7 +15,7 @@ W = {}; B = {}
 for f in F:
     fp = P / 'out' / ('wcsparse59_%s.json' % f)
     if fp.exists(): W.update(json.load(open(fp, encoding='utf-8'))['plugs'])
-    r = json.load(open(P / 'out' / ('plugsr59_%s_n59n_cup.json' % f), encoding='utf-8'))
+    r = json.load(open(P / 'out' / ('plugsr59_%s_n59n_cup_b59n.json' % f), encoding='utf-8'))   # baselines fine-tuned with the same recipe
     B.update({p: v for p, v in r['plugs'].items() if v['code'] == f})
 PIDS = sorted(W, key=lambda p: (W[p]['group'], W[p]['ab']))
 print('柱数', len(PIDS))

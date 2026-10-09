@@ -20,6 +20,7 @@ src/            network definitions, data loading and training scripts
   train.py                   generator pre-training and loss functions
   train54.py                 mean path and final generator training
   train59n.py                degradation-aware fine-tuning for whole-plug scans
+  train59n_base.py           the same fine-tuning for the EDSR-3D and SRGAN-3D baselines
   train_edsr.py, train_srgan.py, train59.py, train_cpred.py   baselines and geological-state predictor
   lbm59.py, lbm59s.py        D3Q19 two-relaxation-time lattice Boltzmann solver
   paths.py                   data, checkpoint and output locations
@@ -76,6 +77,7 @@ Each run folder in `GEOCOND_RUNS` (for example `CQ_g54b/`) holds the checkpoint 
 | `cpred` | geological-state predictor from the coarse scan |
 | `edsr`, `srgan`, `swin`, `diff` | EDSR-3D, SRGAN-3D, SwinIR-3D and 3D diffusion baselines |
 | `m59n`, `n59n`, `g59n` | degradation-aware fine-tuned models for whole-plug scans |
+| `edsr59n`, `srgan59n` | EDSR-3D and SRGAN-3D fine-tuned with the same recipe for whole-plug scans |
 | `proj`, `rot2` | generator pre-training stages (initialization only) |
 
 ## Training

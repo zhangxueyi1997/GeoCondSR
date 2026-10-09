@@ -13,6 +13,7 @@ from dataset import PairDataset, load_H
 from train_edsr import EDSR3D
 
 FOLD, dev = sys.argv[1], 'cuda:%s' % sys.argv[2]; MS, GS = os.environ.get('M_SUF', '_m54b'), os.environ.get('G_SUF', '_n54b')
+B_SUF = os.environ.get('B_SUF', '')   # baseline weights: empty = original checkpoints; 59n = degradation-aware fine-tuned (edsr59n, srgan59n)
 CUP = os.environ.get('CUP', '1') == '1'                    # 默认做成像条件标定（第 59 步定稿）
 ONLY = os.environ.get('ONLY', '')                          # 逗号分隔的柱号（调试用）
 ROOT = str(DATA_ROOT); RUNS = str(RUNS_ROOT); PD = str(DATA_ROOT) + '/plugs/'; OUT = str(OUT_ROOT) + '/plugs59/'; os.makedirs(OUT, exist_ok=True)
@@ -36,7 +37,7 @@ Gn = Generator(n_cond=N_C, ch=64, nres=4, nz=8, level=True, see_a=True, norm_a=T
 Gn.load_state_dict(torch.load('%s/%s%s/ckpt/final.pt' % (RUNS, FOLD, GS), map_location=dev, weights_only=False)['model'])
 base = {}
 for nm, suf in (('EDSR-3D', '_edsr'), ('SRGAN-3D', '_srgan')):
-    m = EDSR3D().to(dev).eval(); m.load_state_dict(torch.load('%s/%s%s/ckpt/step0030000.pt' % (RUNS, FOLD, suf), map_location=dev, weights_only=False)['model']); base[nm] = m
+    m = EDSR3D().to(dev).eval(); m.load_state_dict(torch.load('%s/%s%s%s/ckpt/%s' % (RUNS, FOLD, suf, B_SUF, 'final.pt' if B_SUF else 'step0030000.pt'), map_location=dev, weights_only=False)['model']); base[nm] = m
 MM = ['粗扫阈值', '三线性', 'EDSR-3D', 'SRGAN-3D', '本文·仅粗扫']
 # ---------- 域校正（谱减）：大圆柱粗扫比小柱粗扫多一层与岩性无关的高频噪声。噪声谱 N(f) = 本折训练岩性配对组 (P大 − P小) 的中位数
 # （只用两种粗扫，不用细扫）；每根柱 H(f) = sqrt(clip((P大 − N)/P大, 0.02, 1))，f < 0.1 周/体素不动（N 在 f < 0.15 置 0：该段以结构为主）；窗口镜像延拓到 72³ 频域滤波后裁回。
@@ -110,6 +111,6 @@ for g in meta['test']:
     r['细扫真值'] = [float((ds[int(j)]['hr'][0] < PORE_CUT).mean()) for j in ii]
     res['small'][g] = dict(r, win_p2=np.percentile(W.reshape(len(W), -1), 2, axis=1).mean().item(), win_std=float(W.std(axis=(1, 2, 3)).mean()))
     print(FOLD, '小柱', g, ' '.join('%s %.4f' % (k, np.mean(v)) for k, v in r.items()), flush=True)
-res['model'] = [MS, GS]
-json.dump(res, open(OUT + 'plugsr59_%s%s%s%s.json' % (FOLD, GS, '_cup' if CUP else '', '_only' if ONLY else ''), 'w'), ensure_ascii=False, indent=0)
+res['model'] = [MS, GS, B_SUF]
+json.dump(res, open(OUT + 'plugsr59_%s%s%s%s%s.json' % (FOLD, GS, '_cup' if CUP else '', '_only' if ONLY else '', ('_b' + B_SUF) if B_SUF else ''), 'w'), ensure_ascii=False, indent=0)
 print('DONE', FOLD, flush=True)

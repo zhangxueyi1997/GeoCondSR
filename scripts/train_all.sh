@@ -8,11 +8,12 @@
 #   cpred geological-state predictor from the coarse scan
 #   edsr, srgan, swin, diff   baselines
 #   m59n, n59n, g59n          degradation-aware fine-tuning for whole-plug scans
+#   edsr59n, srgan59n         the same fine-tuning for the EDSR-3D and SRGAN-3D baselines
 set -e
 GPU=${1:-0}
 cd "$(dirname "$0")/.."
 for FOLD in CQ SC YN GZ SD SHX; do
-  for STAGE in proj rot2 m54b n54b g54b g54c g54a g54n cpred edsr srgan swin diff m59n n59n g59n; do
+  for STAGE in proj rot2 m54b n54b g54b g54c g54a g54n cpred edsr srgan swin diff m59n n59n g59n edsr59n srgan59n; do
     python scripts/train_from_config.py ${FOLD}_${STAGE} --gpu "$GPU"
   done
 done

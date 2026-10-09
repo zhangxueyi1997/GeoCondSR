@@ -23,15 +23,15 @@ TAB = json.load(open(P / 'plug_table.json', encoding='utf-8'))
 FINE = {r['组号']: float(r['细扫可分辨孔隙度']) / 100 for r in csv.DictReader(open(H / 'tab01_samples.csv', encoding='utf-8-sig')) if r['细扫可分辨孔隙度'] not in ('', 'nan')}
 
 
-def load(gs):
+def load(gs, tail=''):
     V = {}
     for f in FOLDS:
-        r = json.load(open(P / 'out' / ('plugsr59_%s%s_cup.json' % (f, gs)), encoding='utf-8'))
+        r = json.load(open(P / 'out' / ('plugsr59_%s%s_cup%s.json' % (f, gs, tail)), encoding='utf-8'))
         V.update({p: v for p, v in r['plugs'].items() if v['code'] == f})
     return V
 
 
-V59, V54 = load('_n59n'), load('_n54b')
+V59, V54 = load('_n59n', '_b59n'), load('_n54b')   # whole-plug baselines fine-tuned with the same recipe; V54: no fine-tuning (control)
 PIDS = sorted(V59); HE = np.array([TAB[p]['phi_he'] / 100 for p in PIDS]); GRP = [TAB[p]['group'] for p in PIDS]
 OK = np.array([g in FINE for g in GRP]); FI = np.array([FINE.get(g, np.nan) for g in GRP])
 
@@ -59,7 +59,7 @@ for m in ('EDSR-3D', 'SRGAN-3D', '本文·仅粗扫'):
 print('细扫与氦（26 根）r %.3f ρ %.3f' % (pearsonr(FI[OK], HE[OK])[0], spearmanr(FI[OK], HE[OK])[0]))
 
 # ---------- 图像 ----------
-Z = np.load(P / 'wc_vis59.npz'); c = np.load(P / 'cup/CQ-1.npz'); d = np.load(P / 'CQ-1.npz')
+Z = np.load(P / 'wc_vis59_b59n.npz'); c = np.load(P / 'cup/CQ-1.npz'); d = np.load(P / 'CQ-1.npz')
 files = sorted((RAW_ROOT / 'G01' / 'large_ct' / 'raw16').glob('*.tif')); z0 = int(c['pos'][0, 0])   # without the raw slices, use the copy of this slice in the figure data
 img = (fastio.read(files[z0 + 18]) if files else np.load(FIGDATA / 'plugs' / 'CQ-1_slice.npy')).astype(np.float32)
 a0, D0, an = float(c['air']), float(c['D']), float(c['air_near']); Dn = a0 + D0 - an

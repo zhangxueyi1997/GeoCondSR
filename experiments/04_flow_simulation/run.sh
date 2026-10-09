@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lattice Boltzmann flow simulation on the reconstructed blocks (Section 4.5). Run 03_baselines first.
+# Lattice Boltzmann flow simulation on the reconstructed blocks (Section 4.3). Run 03_baselines first.
 set -e
 cd "$(dirname "$0")"
 GPU=${GPU:-0}
