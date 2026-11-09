@@ -27,7 +27,6 @@ src/            network definitions, data loading and training scripts
 preprocessing/  registration of the dual-resolution scans, gray-level normalization,
                 degradation kernel, microstructure parameters, export of paired blocks
 experiments/    evaluation scripts, one folder per part of the paper (each has run.sh)
-figures/        scripts that draw the figures and tables from the evaluation outputs
 configs/        fold definitions, sample properties and the configuration of every training run
 scripts/        train_from_config.py and train_all.sh
 ```
@@ -51,7 +50,6 @@ The paired dataset, the whole-plug context windows, the trained models and the a
 export GEOCOND_DATA=/path/to/data                # paired blocks and derived inputs
 export GEOCOND_RUNS=/path/to/runs                # model checkpoints
 export GEOCOND_OUT=/path/to/outputs              # evaluation outputs (created automatically)
-export GEOCOND_FIGDATA=/path/to/figure_data      # aggregated results read by the figure scripts
 ```
 
 Expected layout of `GEOCOND_DATA`:
@@ -102,20 +100,6 @@ Run the experiment folders in this order; each `run.sh` loops over the six folds
 | `experiments/02_geological_state` | spatial variation of the parameters, sparse HR calibration, prediction of the sample-mean parameters |
 | `experiments/04_flow_simulation` | lattice Boltzmann permeability and percolation |
 | `experiments/06_whole_plug` | imaging-condition calibration and whole-plug application |
-| `figures/` | figures and tables drawn from the aggregated outputs |
-
-### Figures and tables
-
-The figure scripts read the aggregated results in `GEOCOND_FIGDATA`. With the `figure_data/` folder from Zenodo every figure and table of the paper can be redrawn directly, without rerunning the experiments:
-
-```bash
-cd figures
-python tab01_samples.py                      # first: writes tab01_samples.csv, used by several figure scripts
-python agg_lbm59.py; python agg_plug59.py; python agg_wcsparse.py
-for f in fig*.py tab02*.py tab04*.py; do python $f; done
-```
-
-The exception is the figure with photographs of the samples (`fig01_samples.py`), whose photographs are not part of the data release. `fig11_data.py` recomputes the radial gray-level profiles shown by `fig11_wholecore.py` from the raw whole-plug slices; its output is already in `figure_data/`. After rerunning the experiments, copy their result files into the same layout as `figure_data/` to redraw the figures from your own results.
 
 ### Preprocessing
 

@@ -7,7 +7,7 @@ by default everything lives inside the repository folder.
     GEOCOND_RUNS   model checkpoints (one sub-folder per run, e.g. CQ_g54b/)
     GEOCOND_OUT    evaluation outputs
     GEOCOND_RAW    raw whole-plug CT slices (only needed for the whole-plug preprocessing)
-    GEOCOND_FIGDATA  aggregated results used by the figure scripts
+    GEOCOND_FIGDATA  aggregated evaluation results (figure_data/ in the Zenodo archive)
 """
 import json
 import os
